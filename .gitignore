@@ -67,3 +67,11 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
+
+# JetBrains IDE temporary
+.idea
+
+# Dependencies lock files
+package-lock.json
+yarn.lock
+yarn-error.log

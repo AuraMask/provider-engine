@@ -3,29 +3,29 @@
  * removes irregular keys
  */
 
-const inherits = require('util').inherits
-const Subprovider = require('./subprovider.js')
-const extend = require('xtend')
-const ethUtil = require('ethereumjs-util')
+const inherits = require('util').inherits;
+const Subprovider = require('./subprovider.js');
+const extend = require('xtend');
+const ircUtil = require('icjs-util');
 
-module.exports = SanitizerSubprovider
+module.exports = SanitizerSubprovider;
 
-inherits(SanitizerSubprovider, Subprovider)
+inherits(SanitizerSubprovider, Subprovider);
 
-function SanitizerSubprovider(opts){
-  const self = this
+function SanitizerSubprovider(opts) {
+  const self = this;
 }
 
-SanitizerSubprovider.prototype.handleRequest = function(payload, next, end){
-  var txParams = payload.params[0]
+SanitizerSubprovider.prototype.handleRequest = function(payload, next, end) {
+  var txParams = payload.params[0];
 
   if (typeof txParams === 'object' && !Array.isArray(txParams)) {
-    var sanitized = cloneTxParams(txParams)
-    payload.params[0] = sanitized
+    var sanitized = cloneTxParams(txParams);
+    payload.params[0] = sanitized;
   }
 
-  next()
-}
+  next();
+};
 
 // we use this to clean any custom params from the txParams
 var permitted = [
@@ -40,39 +40,39 @@ var permitted = [
   'toBlock',
   'address',
   'topics',
-]
+];
 
-function cloneTxParams(txParams){
-  var sanitized  =  permitted.reduce(function(copy, permitted) {
+function cloneTxParams(txParams) {
+  var sanitized = permitted.reduce(function(copy, permitted) {
     if (permitted in txParams) {
       if (Array.isArray(txParams[permitted])) {
         copy[permitted] = txParams[permitted]
-        .map(function(item) {
-          return sanitize(item)
-        })
+            .map(function(item) {
+              return sanitize(item);
+            });
       } else {
-        copy[permitted] = sanitize(txParams[permitted])
+        copy[permitted] = sanitize(txParams[permitted]);
       }
     }
-    return copy
-  }, {})
+    return copy;
+  }, {});
 
-  return sanitized
+  return sanitized;
 }
 
 function sanitize(value) {
   switch (value) {
     case 'latest':
-      return value
+      return value;
     case 'pending':
-      return value
+      return value;
     case 'earliest':
-      return value
+      return value;
     default:
       if (typeof value === 'string') {
-        return ethUtil.addHexPrefix(value.toLowerCase())
+        return ircUtil.addHexPrefix(value.toLowerCase());
       } else {
-        return value
+        return value;
       }
   }
 }

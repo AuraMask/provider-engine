@@ -1,5 +1,5 @@
 {
-  "name": "web3-provider-engine",
+  "name": "webu-provider-engine",
   "description": "",
   "main": "dist/ProviderEngine.js",
   "authors": [
@@ -7,11 +7,11 @@
   ],
   "license": "ISC",
   "keywords": [
-    "Ethereum",
-    "Web3",
+    "IrChain",
+    "Webu",
     "Provider"
   ],
-  "homepage": "https://github.com/MetaMask/provider-engine",
+  "homepage": "https://github.com/AuraMask/provider-engine",
   "ignore": [
     "**/.*",
     "node_modules",

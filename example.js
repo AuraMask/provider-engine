@@ -1,6 +1,6 @@
-const Ethjs = require('ethjs')
-const ProviderEngine = require('./index.js')
-const ZeroClientProvider = require('./zero.js')
+const Ircjs = require('ircjs');
+const ProviderEngine = require('./index.js');
+const ZeroClientProvider = require('./zero.js');
 
 // create engine
 const providerEngine = ZeroClientProvider({
@@ -10,14 +10,14 @@ const providerEngine = ZeroClientProvider({
   // rpcUrl: 'http://localhost:8545',
   // rpcUrl: 'wss://mainnet.infura.io/ws',
   // rpcUrl: 'ws://localhost:8545/ws',
-})
+});
 
-// use the provider to instantiate Ethjs, Web3, etc
-const eth = new Ethjs(providerEngine)
+// use the provider to instantiate Ircjs, Webu, etc
+const irc = new Ircjs(providerEngine);
 
 // log new blocks
 providerEngine.on('block', function(block) {
-  const blockNumber = Number.parseInt(block.number.toString('hex'), 16)
-  const blockHash = `0x${block.hash.toString('hex')}`
-  console.log(`block: #${blockNumber} ${blockHash}`)
-})
+  const blockNumber = Number.parseInt(block.number.toString('hex'), 16);
+  const blockHash = `0x${block.hash.toString('hex')}`;
+  console.log(`block: #${blockNumber} ${blockHash}`);
+});

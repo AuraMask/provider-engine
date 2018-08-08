@@ -1,47 +1,45 @@
 const net = require('net');
-const inherits = require('util').inherits
-const createPayload = require('../util/create-payload.js')
-const Subprovider = require('./subprovider.js')
+const inherits = require('util').inherits;
+const createPayload = require('../util/create-payload.js');
+const Subprovider = require('./subprovider.js');
 
-module.exports = IpcSource
+module.exports = IpcSource;
 
-inherits(IpcSource, Subprovider)
+inherits(IpcSource, Subprovider);
 
 function IpcSource(opts) {
-  const self = this
-  self.ipcPath = opts.ipcPath || '/root/.ethereum/geth.ipc'
+  const self = this;
+  self.ipcPath = opts.ipcPath || '/root/.irchain/girc.ipc';
 }
 
-
-IpcSource.prototype.handleRequest = function(payload, next, end){
-  const self = this
-  var targetPath = self.ipcPath
-  var method = payload.method
-  var params = payload.params
+IpcSource.prototype.handleRequest = function(payload, next, end) {
+  const self = this;
+  var targetPath = self.ipcPath;
+  var method = payload.method;
+  var params = payload.params;
 
   // new payload with random large id,
   // so as not to conflict with other concurrent users
-  var newPayload = createPayload(payload)
+  var newPayload = createPayload(payload);
   // console.log('------------------ network attempt -----------------')
   // console.log(payload)
   // console.log('---------------------------------------------')
 
-  if(newPayload == null){
+  if (newPayload == null) {
     console.log('no payload');
     end('no payload', null);
-  };
+  }
 
   var client = net.connect({path: targetPath}, () => {
     client.end(JSON.stringify(payload));
-  })
-
+  });
 
   client.on('connection', (d) => {
-    console.log(d)
+    console.log(d);
   });
 
   client.on('data', (data) => {
-    var response = "";
+    var response = '';
     response += data.toString();
     var res = JSON.parse(response);
     end(null, res.result);
@@ -59,10 +57,10 @@ IpcSource.prototype.handleRequest = function(payload, next, end){
   process.setMaxListeners(Infinity);
 
   process.on('SIGINT', () => {
-    console.log("Caught interrupt signal");
+    console.log('Caught interrupt signal');
 
     client.end();
     process.exit();
   });
 
-}
+};

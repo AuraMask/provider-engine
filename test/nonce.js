@@ -1,6 +1,6 @@
 const test = require('tape')
-const Transaction = require('ethereumjs-tx')
-const ethUtil = require('ethereumjs-util')
+const Transaction = require('icjs-tx')
+const ethUtil = require('icjs-util')
 const ProviderEngine = require('../index.js')
 const FixtureProvider = require('../subproviders/fixture.js')
 const NonceTracker = require('../subproviders/nonce-tracker.js')
@@ -50,7 +50,7 @@ test('basic nonce tracking', function(t){
   engine.addProvider(providerD)
 
   var txPayload = {
-    method: 'eth_sendTransaction',
+    method: 'irc_sendTransaction',
     params: [{
       from: addressHex,
       to: addressHex,

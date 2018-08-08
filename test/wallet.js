@@ -1,11 +1,11 @@
 const test = require('tape')
-const Transaction = require('ethereumjs-tx')
-const ethUtil = require('ethereumjs-util')
+const Transaction = require('icjs-tx')
+const ethUtil = require('icjs-util')
 const ProviderEngine = require('../index.js')
 const FixtureProvider = require('../subproviders/fixture.js')
 const NonceTracker = require('../subproviders/nonce-tracker.js')
 const HookedWalletProvider = require('../subproviders/hooked-wallet.js')
-const HookedWalletTxProvider = require('../subproviders/hooked-wallet-ethtx.js')
+const HookedWalletTxProvider = require('../subproviders/hooked-wallet-irctx.js')
 const TestBlockProvider = require('./util/block.js')
 const createPayload = require('../util/create-payload.js')
 const injectMetrics = require('./util/inject-metrics')
@@ -54,7 +54,7 @@ test('tx sig', function(t){
   engine.addProvider(providerD)
 
   var txPayload = {
-    method: 'eth_sendTransaction',
+    method: 'irc_sendTransaction',
     params: [{
       from: addressHex,
       to: addressHex,
@@ -69,22 +69,22 @@ test('tx sig', function(t){
     t.ok(response, 'has response')
 
     // intial tx request
-    t.equal(providerA.getWitnessed('eth_sendTransaction').length, 1, 'providerA did see "signTransaction"')
-    t.equal(providerA.getHandled('eth_sendTransaction').length, 1, 'providerA did handle "signTransaction"')
+    t.equal(providerA.getWitnessed('irc_sendTransaction').length, 1, 'providerA did see "signTransaction"')
+    t.equal(providerA.getHandled('irc_sendTransaction').length, 1, 'providerA did handle "signTransaction"')
 
     // tx nonce
-    t.equal(providerB.getWitnessed('eth_getTransactionCount').length, 1, 'providerB did see "eth_getTransactionCount"')
-    t.equal(providerB.getHandled('eth_getTransactionCount').length, 0, 'providerB did NOT handle "eth_getTransactionCount"')
-    t.equal(providerC.getWitnessed('eth_getTransactionCount').length, 1, 'providerC did see "eth_getTransactionCount"')
-    t.equal(providerC.getHandled('eth_getTransactionCount').length, 1, 'providerC did handle "eth_getTransactionCount"')
+    t.equal(providerB.getWitnessed('irc_getTransactionCount').length, 1, 'providerB did see "irc_getTransactionCount"')
+    t.equal(providerB.getHandled('irc_getTransactionCount').length, 0, 'providerB did NOT handle "irc_getTransactionCount"')
+    t.equal(providerC.getWitnessed('irc_getTransactionCount').length, 1, 'providerC did see "irc_getTransactionCount"')
+    t.equal(providerC.getHandled('irc_getTransactionCount').length, 1, 'providerC did handle "irc_getTransactionCount"')
 
     // gas price
-    t.equal(providerC.getWitnessed('eth_gasPrice').length, 1, 'providerB did see "eth_gasPrice"')
-    t.equal(providerC.getHandled('eth_gasPrice').length, 1, 'providerB did handle "eth_gasPrice"')
+    t.equal(providerC.getWitnessed('irc_gasPrice').length, 1, 'providerB did see "irc_gasPrice"')
+    t.equal(providerC.getHandled('irc_gasPrice').length, 1, 'providerB did handle "irc_gasPrice"')
 
     // send raw tx
-    t.equal(providerC.getWitnessed('eth_sendRawTransaction').length, 1, 'providerC did see "eth_sendRawTransaction"')
-    t.equal(providerC.getHandled('eth_sendRawTransaction').length, 1, 'providerC did handle "eth_sendRawTransaction"')
+    t.equal(providerC.getWitnessed('irc_sendRawTransaction').length, 1, 'providerC did see "irc_sendRawTransaction"')
+    t.equal(providerC.getHandled('irc_sendRawTransaction').length, 1, 'providerC did handle "irc_sendRawTransaction"')
 
     engine.stop()
     t.end()
@@ -128,7 +128,7 @@ test('no such account', function(t){
   engine.addProvider(providerD)
 
   var txPayload = {
-    method: 'eth_sendTransaction',
+    method: 'irc_sendTransaction',
     params: [{
       from: otherAddressHex,
       to: addressHex,
@@ -175,7 +175,7 @@ test('sign message', function(t){
   engine.addProvider(providerB)
 
   var payload = {
-    method: 'eth_sign',
+    method: 'irc_sign',
     params: [
       addressHex,
       message,
@@ -252,7 +252,7 @@ recoverTest({
 
 signatureTest({
   testLabel: 'sign typed message',
-  method: 'eth_signTypedData',
+  method: 'irc_signTypedData',
   message: [
     {
       type: 'string',
@@ -295,7 +295,7 @@ test('sender validation, with mixed-case', function(t){
 
   engine.start()
   engine.sendAsync({
-    method: 'eth_sendTransaction',
+    method: 'irc_sendTransaction',
     params: [{
       from: senderAddress.toLowerCase(),
     }]

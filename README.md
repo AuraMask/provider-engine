@@ -1,37 +1,37 @@
-# Web3 ProviderEngine
+# Webu ProviderEngine
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/MetaMask/provider-engine.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/AuraMask/provider-engine.svg)](https://greenkeeper.io/)
 
-Web3 ProviderEngine is a tool for composing your own [web3 providers](https://github.com/ethereum/wiki/wiki/JavaScript-API#web3).
+Webu ProviderEngine is a tool for composing your own [webu providers](https://github.com/irchain/wiki/wiki/JavaScript-API#webu).
 
 
 ### Composable
 
-Built to be modular - works via a stack of 'sub-providers' which are like normal web3 providers but only handle a subset of rpc methods.
+Built to be modular - works via a stack of 'sub-providers' which are like normal webu providers but only handle a subset of rpc methods.
 
-The subproviders can emit new rpc requests in order to handle their own;  e.g. `eth_call` may trigger `eth_getAccountBalance`, `eth_getCode`, and others.
+The subproviders can emit new rpc requests in order to handle their own;  e.g. `irc_call` may trigger `irc_getAccountBalance`, `irc_getCode`, and others.
 The provider engine also handles caching of rpc request results.
 
 ```js
-const ProviderEngine = require('web3-provider-engine')
-const CacheSubprovider = require('web3-provider-engine/subproviders/cache.js')
-const FixtureSubprovider = require('web3-provider-engine/subproviders/fixture.js')
-const FilterSubprovider = require('web3-provider-engine/subproviders/filters.js')
-const VmSubprovider = require('web3-provider-engine/subproviders/vm.js')
-const HookedWalletSubprovider = require('web3-provider-engine/subproviders/hooked-wallet.js')
-const NonceSubprovider = require('web3-provider-engine/subproviders/nonce-tracker.js')
-const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js')
+const ProviderEngine = require('webu-provider-engine')
+const CacheSubprovider = require('webu-provider-engine/subproviders/cache.js')
+const FixtureSubprovider = require('webu-provider-engine/subproviders/fixture.js')
+const FilterSubprovider = require('webu-provider-engine/subproviders/filters.js')
+const VmSubprovider = require('webu-provider-engine/subproviders/vm.js')
+const HookedWalletSubprovider = require('webu-provider-engine/subproviders/hooked-wallet.js')
+const NonceSubprovider = require('webu-provider-engine/subproviders/nonce-tracker.js')
+const RpcSubprovider = require('webu-provider-engine/subproviders/rpc.js')
 
 var engine = new ProviderEngine()
-var web3 = new Web3(engine)
+var webu = new Webu(engine)
 
 // static results
 engine.addProvider(new FixtureSubprovider({
-  web3_clientVersion: 'ProviderEngine/v0.0.0/javascript',
+  webu_clientVersion: 'ProviderEngine/v0.0.0/javascript',
   net_listening: true,
-  eth_hashrate: '0x00',
-  eth_mining: false,
-  eth_syncing: true,
+  irc_hashrate: '0x00',
+  irc_mining: false,
+  irc_syncing: true,
 }))
 
 // cache layer
@@ -77,15 +77,15 @@ engine.start()
 
 When importing in webpack:
 ```js
-import * as Web3ProviderEngine  from 'web3-provider-engine';
-import * as RpcSource  from 'web3-provider-engine/subproviders/rpc';
-import * as HookedWalletSubprovider from 'web3-provider-engine/subproviders/hooked-wallet';
+import * as WebuProviderEngine  from 'webu-provider-engine';
+import * as RpcSource  from 'webu-provider-engine/subproviders/rpc';
+import * as HookedWalletSubprovider from 'webu-provider-engine/subproviders/hooked-wallet';
 ```
 
 ### Built For Zero-Clients
 
-The [Ethereum JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) was not designed to have one node service many clients.
-However a smaller, lighter subset of the JSON RPC can be used to provide the blockchain data that an Ethereum 'zero-client' node would need to function.
+The [IrChain JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) was not designed to have one node service many clients.
+However a smaller, lighter subset of the JSON RPC can be used to provide the blockchain data that an IrChain 'zero-client' node would need to function.
 We handle as many types of requests locally as possible, and just let data lookups fallback to some data source ( hosted rpc, blockchain api, etc ).
 Categorically, we don’t want / can’t have the following types of RPC calls go to the network:
 * id mgmt + tx signing (requires private data)
@@ -103,7 +103,7 @@ Categorically, we don’t want / can’t have the following types of RPC calls g
 - removed `dist` from git (but published in npm module)
 - es5 builds in `dist/es5`
 - zero + ProviderEngine bundles are es5
-- web3 subprovider renamed to provider subprovider
+- webu subprovider renamed to provider subprovider
 - error if provider subprovider is missing a proper provider
 - removed need to supply getAccounts hook
 - fixed `hooked-wallet-ethtx` message signing
@@ -111,11 +111,11 @@ Categorically, we don’t want / can’t have the following types of RPC calls g
 
 ##### 13.0.0
 
-- txs included in blocks via [`eth-block-tracker`](https://github.com/kumavis/eth-block-tracker)@2.0.0
+- txs included in blocks via [`irc-block-tracker`](https://github.com/kumavis/irc-block-tracker)@2.0.0
 
 ##### 12.0.0
 
-- moved block polling to [`eth-block-tracker`](https://github.com/kumavis/eth-block-tracker).
+- moved block polling to [`irc-block-tracker`](https://github.com/kumavis/irc-block-tracker).
 
 ##### 11.0.0
 
@@ -133,33 +133,33 @@ Categorically, we don’t want / can’t have the following types of RPC calls g
 ### Current RPC method support:
 
 ##### static
-- [x] web3_clientVersion
+- [x] webu_clientVersion
 - [x] net_version
 - [x] net_listening
 - [x] net_peerCount
-- [x] eth_protocolVersion
-- [x] eth_hashrate
-- [x] eth_mining
-- [x] eth_syncing
+- [x] irc_protocolVersion
+- [x] irc_hashrate
+- [x] irc_mining
+- [x] irc_syncing
 
 ##### filters
-- [x] eth_newBlockFilter
-- [x] eth_newPendingTransactionFilter
-- [x] eth_newFilter
-- [x] eth_uninstallFilter
-- [x] eth_getFilterLogs
-- [x] eth_getFilterChanges
+- [x] irc_newBlockFilter
+- [x] irc_newPendingTransactionFilter
+- [x] irc_newFilter
+- [x] irc_uninstallFilter
+- [x] irc_getFilterLogs
+- [x] irc_getFilterChanges
 
 ##### accounts manager
-- [x] eth_coinbase
-- [x] eth_accounts
-- [x] eth_sendTransaction
-- [x] eth_sign
-- [x] [eth_signTypedData](https://github.com/ethereum/EIPs/pull/712)
+- [x] irc_coinbase
+- [x] irc_accounts
+- [x] irc_sendTransaction
+- [x] irc_sign
+- [x] [irc_signTypedData](https://github.com/ethereum/EIPs/pull/712)
 
 ##### vm
-- [x] eth_call
-- [x] eth_estimateGas
+- [x] irc_call
+- [x] irc_estimateGas
 
 ##### db source
 - [ ] db_putString
@@ -168,10 +168,10 @@ Categorically, we don’t want / can’t have the following types of RPC calls g
 - [ ] db_getHex
 
 ##### compiler
-- [ ] eth_getCompilers
-- [ ] eth_compileLLL
-- [ ] eth_compileSerpent
-- [ ] eth_compileSolidity
+- [ ] irc_getCompilers
+- [ ] irc_compileLLL
+- [ ] irc_compileSerpent
+- [ ] irc_compileSolidity
 
 ##### shh gateway
 - [ ] shh_version
@@ -182,28 +182,28 @@ Categorically, we don’t want / can’t have the following types of RPC calls g
 - [ ] shh_addToGroup
 
 ##### data source ( fallback to rpc )
-* eth_gasPrice
-* eth_blockNumber
-* eth_getBalance
-* eth_getBlockByHash
-* eth_getBlockByNumber
-* eth_getBlockTransactionCountByHash
-* eth_getBlockTransactionCountByNumber
-* eth_getCode
-* eth_getStorageAt
-* eth_getTransactionByBlockHashAndIndex
-* eth_getTransactionByBlockNumberAndIndex
-* eth_getTransactionByHash
-* eth_getTransactionCount
-* eth_getTransactionReceipt
-* eth_getUncleByBlockHashAndIndex
-* eth_getUncleByBlockNumberAndIndex
-* eth_getUncleCountByBlockHash
-* eth_getUncleCountByBlockNumber
-* eth_sendRawTransaction
-* eth_getLogs ( not used in web3.js )
+* irc_gasPrice
+* irc_blockNumber
+* irc_getBalance
+* irc_getBlockByHash
+* irc_getBlockByNumber
+* irc_getBlockTransactionCountByHash
+* irc_getBlockTransactionCountByNumber
+* irc_getCode
+* irc_getStorageAt
+* irc_getTransactionByBlockHashAndIndex
+* irc_getTransactionByBlockNumberAndIndex
+* irc_getTransactionByHash
+* irc_getTransactionCount
+* irc_getTransactionReceipt
+* irc_getUncleByBlockHashAndIndex
+* irc_getUncleByBlockNumberAndIndex
+* irc_getUncleCountByBlockHash
+* irc_getUncleCountByBlockNumber
+* irc_sendRawTransaction
+* irc_getLogs ( not used in webu.js )
 
 ##### ( not supported )
-* eth_getWork
-* eth_submitWork
-* eth_submitHashrate ( not used in web3.js )
+* irc_getWork
+* irc_submitWork
+* irc_submitHashrate ( not used in webu.js )

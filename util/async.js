@@ -65,15 +65,15 @@ module.exports = {
       } else {
         next();
       }
-    };
+    }
 
     function next() {
       current += 1;
 
       var item = items[current];
       iterator(item, callback);
-    };
+    }
 
-    next()
-  }
+    next();
+  },
 };

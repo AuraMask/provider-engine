@@ -39,8 +39,8 @@ function paramsWithoutBlockTag(payload){
     return payload.params;
   }
 
-  // eth_getBlockByNumber has the block tag first, then the optional includeTx? param
-  if (payload.method === 'eth_getBlockByNumber') {
+  // irc_getBlockByNumber has the block tag first, then the optional includeTx? param
+  if (payload.method === 'irc_getBlockByNumber') {
     return payload.params.slice(1);
   }
 
@@ -50,17 +50,17 @@ function paramsWithoutBlockTag(payload){
 function blockTagParamIndex(payload){
   switch(payload.method) {
     // blockTag is third param
-    case 'eth_getStorageAt':
+    case 'irc_getStorageAt':
       return 2
     // blockTag is second param
-    case 'eth_getBalance':
-    case 'eth_getCode':
-    case 'eth_getTransactionCount':
-    case 'eth_call':
-    case 'eth_estimateGas':
+    case 'irc_getBalance':
+    case 'irc_getCode':
+    case 'irc_getTransactionCount':
+    case 'irc_call':
+    case 'irc_estimateGas':
       return 1
     // blockTag is first param
-    case 'eth_getBlockByNumber':
+    case 'irc_getBlockByNumber':
       return 0
     // there is no blockTag
     default:
@@ -71,42 +71,42 @@ function blockTagParamIndex(payload){
 function cacheTypeForPayload(payload) {
   switch (payload.method) {
     // cache permanently
-    case 'web3_clientVersion':
-    case 'web3_sha3':
-    case 'eth_protocolVersion':
-    case 'eth_getBlockTransactionCountByHash':
-    case 'eth_getUncleCountByBlockHash':
-    case 'eth_getCode':
-    case 'eth_getBlockByHash':
-    case 'eth_getTransactionByHash':
-    case 'eth_getTransactionByBlockHashAndIndex':
-    case 'eth_getTransactionReceipt':
-    case 'eth_getUncleByBlockHashAndIndex':
-    case 'eth_getCompilers':
-    case 'eth_compileLLL':
-    case 'eth_compileSolidity':
-    case 'eth_compileSerpent':
+    case 'webu_clientVersion':
+    case 'webu_sha3':
+    case 'irc_protocolVersion':
+    case 'irc_getBlockTransactionCountByHash':
+    case 'irc_getUncleCountByBlockHash':
+    case 'irc_getCode':
+    case 'irc_getBlockByHash':
+    case 'irc_getTransactionByHash':
+    case 'irc_getTransactionByBlockHashAndIndex':
+    case 'irc_getTransactionReceipt':
+    case 'irc_getUncleByBlockHashAndIndex':
+    case 'irc_getCompilers':
+    case 'irc_compileLLL':
+    case 'irc_compileSolidity':
+    case 'irc_compileSerpent':
     case 'shh_version':
       return 'perma'
 
     // cache until fork
-    case 'eth_getBlockByNumber':
-    case 'eth_getBlockTransactionCountByNumber':
-    case 'eth_getUncleCountByBlockNumber':
-    case 'eth_getTransactionByBlockNumberAndIndex':
-    case 'eth_getUncleByBlockNumberAndIndex':
+    case 'irc_getBlockByNumber':
+    case 'irc_getBlockTransactionCountByNumber':
+    case 'irc_getUncleCountByBlockNumber':
+    case 'irc_getTransactionByBlockNumberAndIndex':
+    case 'irc_getUncleByBlockNumberAndIndex':
       return 'fork'
 
     // cache for block
-    case 'eth_gasPrice':
-    case 'eth_blockNumber':
-    case 'eth_getBalance':
-    case 'eth_getStorageAt':
-    case 'eth_getTransactionCount':
-    case 'eth_call':
-    case 'eth_estimateGas':
-    case 'eth_getFilterLogs':
-    case 'eth_getLogs':
+    case 'irc_gasPrice':
+    case 'irc_blockNumber':
+    case 'irc_getBalance':
+    case 'irc_getStorageAt':
+    case 'irc_getTransactionCount':
+    case 'irc_call':
+    case 'irc_estimateGas':
+    case 'irc_getFilterLogs':
+    case 'irc_getLogs':
     case 'net_peerCount':
       return 'block'
 
@@ -114,22 +114,22 @@ function cacheTypeForPayload(payload) {
     case 'net_version':
     case 'net_peerCount':
     case 'net_listening':
-    case 'eth_syncing':
-    case 'eth_sign':
-    case 'eth_coinbase':
-    case 'eth_mining':
-    case 'eth_hashrate':
-    case 'eth_accounts':
-    case 'eth_sendTransaction':
-    case 'eth_sendRawTransaction':
-    case 'eth_newFilter':
-    case 'eth_newBlockFilter':
-    case 'eth_newPendingTransactionFilter':
-    case 'eth_uninstallFilter':
-    case 'eth_getFilterChanges':
-    case 'eth_getWork':
-    case 'eth_submitWork':
-    case 'eth_submitHashrate':
+    case 'irc_syncing':
+    case 'irc_sign':
+    case 'irc_coinbase':
+    case 'irc_mining':
+    case 'irc_hashrate':
+    case 'irc_accounts':
+    case 'irc_sendTransaction':
+    case 'irc_sendRawTransaction':
+    case 'irc_newFilter':
+    case 'irc_newBlockFilter':
+    case 'irc_newPendingTransactionFilter':
+    case 'irc_uninstallFilter':
+    case 'irc_getFilterChanges':
+    case 'irc_getWork':
+    case 'irc_submitWork':
+    case 'irc_submitHashrate':
     case 'db_putString':
     case 'db_getString':
     case 'db_putHex':
