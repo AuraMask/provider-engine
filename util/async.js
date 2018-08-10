@@ -19,7 +19,7 @@ module.exports = {
         // Return if we found a failure anywhere.
         // We can't stop execution of functions since they've already
         // been fired off; but we can prevent excessive handling of callbacks.
-        if (failure != false) {
+        if (failure !== false) {
           return;
         }
 
@@ -31,7 +31,7 @@ module.exports = {
 
         actual += 1;
 
-        if (actual == expected) {
+        if (actual === expected) {
           done(null, results);
         }
       };
@@ -42,7 +42,7 @@ module.exports = {
       iterator(item, createIntermediary(i));
     }
 
-    if (items.length == 0) {
+    if (items.length === 0) {
       done(null, []);
     }
   },
@@ -60,7 +60,7 @@ module.exports = {
 
       results.push(result);
 
-      if (current == expected) {
+      if (current === expected) {
         return done(null, results);
       } else {
         next();

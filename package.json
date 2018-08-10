@@ -24,11 +24,11 @@
     "cross-fetch": "^2.1.0",
     "icjs-util": "^0.0.1",
     "irc-sig-util": "^0.0.1",
-    "irc-block-tracker": "git+https://github.com/AuraMask/irc-block-tracker.git",
-    "irc-json-rpc-infura": "git+https://github.com/AuraMask/irc-json-rpc-infura.git",
-    "icjs-block": "git+https://github.com/icjs/icjs-block.git",
-    "icjs-tx": "git+https://github.com/icjs/icjs-tx.git",
-    "icjs-vm": "git+https://github.com/icjs/icjs-vm.git",
+    "irc-block-tracker": "^0.0.2",
+    "irc-json-rpc-infura": "^0.0.1",
+    "icjs-block": "^0.0.1",
+    "icjs-tx": "^0.0.2",
+    "icjs-vm": "^0.0.2",
     "json-rpc-error": "^2.0.0",
     "json-stable-stringify": "^1.0.1",
     "promise-to-callback": "^1.0.0",
@@ -44,7 +44,9 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "browserify": "^16.1.1"
+    "browserify": "^16.1.1",
+    "webu": "^2.0.1",
+    "ethjs-provider-http": "^0.1.6"
   },
   "browser": {
     "request": false,

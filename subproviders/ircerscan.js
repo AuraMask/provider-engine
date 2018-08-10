@@ -43,7 +43,7 @@ function IrcerscanProvider(opts) {
 }
 
 IrcerscanProvider.prototype.handleRequests = function(self) {
-  if (self.requests.length == 0) return;
+  if (self.requests.length === 0) return;
 
   //console.log('Handling the next ' + self.times + ' of ' + self.requests.length + ' requests');
 

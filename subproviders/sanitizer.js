@@ -43,7 +43,7 @@ var permitted = [
 ];
 
 function cloneTxParams(txParams) {
-  var sanitized = permitted.reduce(function(copy, permitted) {
+  return permitted.reduce(function(copy, permitted) {
     if (permitted in txParams) {
       if (Array.isArray(txParams[permitted])) {
         copy[permitted] = txParams[permitted]
@@ -56,8 +56,6 @@ function cloneTxParams(txParams) {
     }
     return copy;
   }, {});
-
-  return sanitized;
 }
 
 function sanitize(value) {

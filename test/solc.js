@@ -22,7 +22,6 @@
 //
 //   var contractSource = 'pragma solidity ^0.4.2; contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }'
 //
-//   engine.start()
 //   engine.sendAsync(createPayload({ method: 'irc_compileSolidity', params: [ contractSource ] }), function(err, response){
 //     t.ifError(err, 'did not error')
 //     t.ok(response, 'has response')
@@ -65,7 +64,6 @@
 //
 //   var contractSource = 'pragma solidity ^0.4.2; contract error { error() }'
 //
-//   engine.start()
 //   engine.sendAsync(createPayload({ method: 'irc_compileSolidity', params: [ contractSource ] }), function(err, response){
 //     t.equal(typeof err, 'string', 'error type is string')
 //     engine.stop()

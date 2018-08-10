@@ -31,7 +31,7 @@ VmSubprovider.prototype.setEngine = function(engine) {
   const self = this;
   Subprovider.prototype.setEngine.call(self, engine);
   // unblock initialization after first block
-  engine.once('block', function(block) {
+  engine.once('latest', function(block) {
     self._blockGasLimit = ircUtil.bufferToInt(block.gasLimit);
     self._ready.go();
   });

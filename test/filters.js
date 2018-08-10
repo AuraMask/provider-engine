@@ -243,10 +243,9 @@ function filterTest(label, filterPayload, afterInstall, filterChangesOne, filter
     })
     engine.addProvider(filterProvider)
     engine.addProvider(blockProvider)
-    engine.once('block', startTest)
+    engine.once('latest', startTest)
 
     setTimeout(() => {
-      engine.start()
     }, 1)
 
     function startTest(){
@@ -264,7 +263,7 @@ function filterTest(label, filterPayload, afterInstall, filterChangesOne, filter
 
         afterInstall(t, testMeta, response, function(err){
           t.ifError(err, 'did not error')
-          engine.once('block', continueTest)
+          engine.once('latest', continueTest)
         })
       })
     }

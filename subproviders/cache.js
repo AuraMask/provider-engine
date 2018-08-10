@@ -30,11 +30,11 @@ BlockCacheProvider.prototype.setEngine = function(engine) {
   const self = this;
   self.engine = engine;
   // unblock initialization after first block
-  engine.once('block', function(block) {
+  engine.once('latest', function(block) {
     self.currentBlock = block;
     self._ready.go();
     // from now on, empty old cache every block
-    engine.on('block', clearOldCache);
+    engine.on('latest', clearOldCache);
   });
 
   function clearOldCache(newBlock) {
@@ -51,13 +51,13 @@ BlockCacheProvider.prototype.handleRequest = function(payload, next, end) {
 
   // skip cache if told to do so
   if (payload.skipCache) {
-    // console.log('CACHE SKIP - skip cache if told to do so')
+    // console.log('CACHE SKIP - skip cache if told to do so');
     return next();
   }
 
   // Ignore block polling requests.
   if (payload.method === 'irc_getBlockByNumber' && payload.params[0] === 'latest') {
-    // console.log('CACHE SKIP - Ignore block polling requests.')
+    // console.log('CACHE SKIP - Ignore block polling requests.');
     return next();
   }
 
@@ -91,7 +91,7 @@ BlockCacheProvider.prototype._handleRequest = function(payload, next, end) {
   if (blockTag === 'earliest') {
     requestedBlockNumber = '0x00';
   } else if (blockTag === 'latest') {
-    requestedBlockNumber = ircUtil.bufferToHex(self.currentBlock.number);
+    requestedBlockNumber = ircUtil.bufferToHex(self.currentBlock);
   } else {
     // We have a hex number
     requestedBlockNumber = blockTag;
@@ -253,7 +253,7 @@ BlockCacheStrategy.prototype.canCache = function(payload) {
 // naively removes older block caches
 BlockCacheStrategy.prototype.cacheRollOff = function(previousBlock) {
   const self = this;
-  const previousHex = ircUtil.bufferToHex(previousBlock.number);
+  const previousHex = ircUtil.bufferToHex(previousBlock);
   const oldBlockNumber = Number.parseInt(previousHex, 16);
   // clear old caches
   Object.keys(self.cache)
@@ -277,6 +277,5 @@ function hexToBN(hex) {
 function containsBlockhash(result) {
   if (!result) return false;
   if (!result.blockHash) return false;
-  const hasNonZeroHash = hexToBN(result.blockHash).gt(new BN(0));
-  return hasNonZeroHash;
+  return hexToBN(result.blockHash).gt(new BN(0));
 }

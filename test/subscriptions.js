@@ -165,10 +165,9 @@ function subscriptionTest(label, subscriptionPayload, afterInstall, subscription
     })
     engine.addProvider(subscriptionSubprovider)
     engine.addProvider(blockProvider)
-    engine.once('block', startTest)
+    engine.once('latest', startTest)
 
     setTimeout(() => {
-      engine.start()
     }, 1)
 
     function startTest(){

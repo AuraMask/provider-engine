@@ -7,16 +7,21 @@ const eachSeries = require('async/eachSeries');
 const Stoplight = require('./util/stoplight.js');
 const cacheUtils = require('./util/rpc-cache-utils.js');
 const createPayload = require('./util/create-payload.js');
-const noop = function() {};
 
 module.exports = WebuProviderEngine;
 
 inherits(WebuProviderEngine, EventEmitter);
 
 function WebuProviderEngine(opts) {
+  // local state
   const self = this;
-  EventEmitter.call(self);
+  self.currentBlock = null;
+  self._providers = [];
+  self._ready = new Stoplight();
   self.setMaxListeners(30);
+
+  EventEmitter.call(self);
+
   // parse options
   opts = opts || {};
 
@@ -32,40 +37,33 @@ function WebuProviderEngine(opts) {
     pollingInterval: opts.pollingInterval || 4000,
   });
 
-  // handle new block
-  self._blockTracker.on('block', (jsonBlock) => {
-    const bufferBlock = toBufferBlock(jsonBlock);
-    self._setCurrentBlock(bufferBlock);
-  });
-
-  // emit block events from the block tracker
-  self._blockTracker.on('block', self.emit.bind(self, 'rawBlock'));
-  self._blockTracker.on('sync', self.emit.bind(self, 'sync'));
-  self._blockTracker.on('latest', self.emit.bind(self, 'latest'));
-
-  // set initialization blocker
-  self._ready = new Stoplight();
-  // unblock initialization after first block
-  self._blockTracker.once('block', () => {
-    self._ready.go();
-  });
-  // local state
-  self.currentBlock = null;
-  self._providers = [];
+  // self._ready.go();
 }
 
 // public
 
-WebuProviderEngine.prototype.start = function(cb = noop) {
+WebuProviderEngine.prototype._syncBlock = function() {
   const self = this;
-  // start block polling
-  self._blockTracker.start().then(cb).catch(cb);
+  self._blockTracker.on('latest', block => {
+    self.currentBlock = block;
+  });
+};
+
+WebuProviderEngine.prototype.start = function() {
+  const self = this;
+  if (!self._blockTracker.isRunning()) {
+    self._blockTracker.on('sync', self.emit.bind(self, 'sync'));
+    self._blockTracker.on('latest', self.emit.bind(self, 'latest'));
+    self._ready.go();
+  }
 };
 
 WebuProviderEngine.prototype.stop = function() {
   const self = this;
-  // stop block polling
-  self._blockTracker.stop();
+  if (self._blockTracker.isRunning()) {
+    self._blockTracker.removeAllListeners();
+    self._ready.stop();
+  }
 };
 
 WebuProviderEngine.prototype.addProvider = function(source) {
@@ -156,16 +154,6 @@ WebuProviderEngine.prototype._handleAsync = function(payload, finished) {
       }
     });
   }
-};
-
-//
-// from remote-data
-//
-
-WebuProviderEngine.prototype._setCurrentBlock = function(block) {
-  const self = this;
-  self.currentBlock = block;
-  self.emit('block', block);
 };
 
 // util

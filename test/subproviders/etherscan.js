@@ -4,13 +4,12 @@ const ProviderEngine = require('../../index.js');
 const createPayload = require('../../util/create-payload.js');
 const IrcerscanSubprovider = require('../../subproviders/ircerscan');
 
-test('etherscan irc_getBlockTransactionCountByNumber', function(t) {
+test('ircerscan irc_getBlockTransactionCountByNumber', function(t) {
   t.plan(3);
 
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_getBlockTransactionCountByNumber',
     params: [
@@ -24,13 +23,12 @@ test('etherscan irc_getBlockTransactionCountByNumber', function(t) {
   });
 });
 
-test('etherscan irc_getTransactionByHash', function(t) {
+test('ircerscan irc_getTransactionByHash', function(t) {
   t.plan(3);
 
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_getTransactionByHash',
     params: [
@@ -44,13 +42,12 @@ test('etherscan irc_getTransactionByHash', function(t) {
   });
 });
 
-test('etherscan irc_blockNumber', function(t) {
+test('ircerscan irc_blockNumber', function(t) {
   t.plan(3);
 
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_blockNumber',
     params: [],
@@ -62,13 +59,12 @@ test('etherscan irc_blockNumber', function(t) {
   });
 });
 
-test('etherscan irc_getBlockByNumber', function(t) {
+test('ircerscan irc_getBlockByNumber', function(t) {
   t.plan(3);
 
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_getBlockByNumber',
     params: [
@@ -83,13 +79,12 @@ test('etherscan irc_getBlockByNumber', function(t) {
   });
 });
 
-test('etherscan irc_getBalance', function(t) {
+test('ircerscan irc_getBalance', function(t) {
   t.plan(3);
 
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_getBalance',
     params: [
@@ -104,14 +99,13 @@ test('etherscan irc_getBalance', function(t) {
   });
 });
 
-test('etherscan irc_call', function(t) {
+test('ircerscan irc_call', function(t) {
   t.plan(3);
 
   var signature = Buffer.concat([sha3('getLatestBlock()', 256)], 4).toString('hex');
   var engine = new ProviderEngine();
-  var etherscan = new IrcerscanSubprovider();
-  engine.addProvider(etherscan);
-  engine.start();
+  var ircerscan = new IrcerscanSubprovider();
+  engine.addProvider(ircerscan);
   engine.sendAsync(createPayload({
     method: 'irc_call',
     params: [

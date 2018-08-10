@@ -18,13 +18,13 @@ function TestBlockProvider(methods) {
   self._pendingTxs = [];
   self.nextBlock();
   FixtureProvider.call(self, {
-    eth_getBlockByNumber: function(payload, next, end) {
+    irc_getBlockByNumber: function(payload, next, end) {
       const blockRef = payload.params[0];
       const result = self.getBlockByRef(blockRef);
       // return result asynchronously
       setTimeout(() => end(null, result));
     },
-    eth_getLogs: function(payload, next, end) {
+    irc_getLogs: function(payload, next, end) {
       const transactions = self._currentBlock.transactions;
       // return result asynchronously
       setTimeout(() => end(null, transactions));

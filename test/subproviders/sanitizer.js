@@ -35,7 +35,6 @@ test('Sanitizer removes unknown keys', function(t) {
   var blockProvider = new TestBlockProvider()
   engine.addProvider(blockProvider)
 
-  engine.start()
 
   var payload = {
     method: 'test_unsanitized',

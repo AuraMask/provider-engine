@@ -1,4 +1,4 @@
-const stringify = require('json-stable-stringify')
+const stringify = require('json-stable-stringify');
 
 module.exports = {
   cacheIdentifierForPayload: cacheIdentifierForPayload,
@@ -7,20 +7,20 @@ module.exports = {
   paramsWithoutBlockTag: paramsWithoutBlockTag,
   blockTagParamIndex: blockTagParamIndex,
   cacheTypeForPayload: cacheTypeForPayload,
+};
+
+function cacheIdentifierForPayload(payload, opts = {}) {
+  if (!canCache(payload)) return null;
+  const {includeBlockRef} = opts;
+  const params = includeBlockRef ? payload.params : paramsWithoutBlockTag(payload);
+  return payload.method + ':' + stringify(params);
 }
 
-function cacheIdentifierForPayload(payload, opts = {}){
-  if (!canCache(payload)) return null
-  const { includeBlockRef } = opts
-  const params = includeBlockRef ? payload.params : paramsWithoutBlockTag(payload)
-  return payload.method + ':' + stringify(params)
+function canCache(payload) {
+  return cacheTypeForPayload(payload) !== 'never';
 }
 
-function canCache(payload){
-  return cacheTypeForPayload(payload) !== 'never'
-}
-
-function blockTagForPayload(payload){
+function blockTagForPayload(payload) {
   var index = blockTagParamIndex(payload);
 
   // Block tag param not passed.
@@ -31,7 +31,7 @@ function blockTagForPayload(payload){
   return payload.params[index];
 }
 
-function paramsWithoutBlockTag(payload){
+function paramsWithoutBlockTag(payload) {
   var index = blockTagParamIndex(payload);
 
   // Block tag param not passed.
@@ -44,33 +44,33 @@ function paramsWithoutBlockTag(payload){
     return payload.params.slice(1);
   }
 
-  return payload.params.slice(0,index);
+  return payload.params.slice(0, index);
 }
 
-function blockTagParamIndex(payload){
-  switch(payload.method) {
-    // blockTag is third param
+function blockTagParamIndex(payload) {
+  switch (payload.method) {
+      // blockTag is third param
     case 'irc_getStorageAt':
-      return 2
-    // blockTag is second param
+      return 2;
+      // blockTag is second param
     case 'irc_getBalance':
     case 'irc_getCode':
     case 'irc_getTransactionCount':
     case 'irc_call':
     case 'irc_estimateGas':
-      return 1
-    // blockTag is first param
+      return 1;
+      // blockTag is first param
     case 'irc_getBlockByNumber':
-      return 0
-    // there is no blockTag
+      return 0;
+      // there is no blockTag
     default:
-      return undefined
+      return undefined;
   }
 }
 
 function cacheTypeForPayload(payload) {
   switch (payload.method) {
-    // cache permanently
+      // cache permanently
     case 'webu_clientVersion':
     case 'webu_sha3':
     case 'irc_protocolVersion':
@@ -87,17 +87,17 @@ function cacheTypeForPayload(payload) {
     case 'irc_compileSolidity':
     case 'irc_compileSerpent':
     case 'shh_version':
-      return 'perma'
+      return 'perma';
 
-    // cache until fork
+      // cache until fork
     case 'irc_getBlockByNumber':
     case 'irc_getBlockTransactionCountByNumber':
     case 'irc_getUncleCountByBlockNumber':
     case 'irc_getTransactionByBlockNumberAndIndex':
     case 'irc_getUncleByBlockNumberAndIndex':
-      return 'fork'
+      return 'fork';
 
-    // cache for block
+      // cache for block
     case 'irc_gasPrice':
     case 'irc_blockNumber':
     case 'irc_getBalance':
@@ -107,10 +107,9 @@ function cacheTypeForPayload(payload) {
     case 'irc_estimateGas':
     case 'irc_getFilterLogs':
     case 'irc_getLogs':
-    case 'net_peerCount':
-      return 'block'
+      return 'block';
 
-    // never cache
+      // never cache
     case 'net_version':
     case 'net_peerCount':
     case 'net_listening':
@@ -143,6 +142,6 @@ function cacheTypeForPayload(payload) {
     case 'shh_uninstallFilter':
     case 'shh_getFilterChanges':
     case 'shh_getMessages':
-      return 'never'
+      return 'never';
   }
 }

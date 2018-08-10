@@ -4,14 +4,12 @@ module.exports = SubProvider;
 
 // this is the base class for a subprovider -- mostly helpers
 
-function SubProvider() {
-
-}
+function SubProvider() {}
 
 SubProvider.prototype.setEngine = function(engine) {
   const self = this;
   self.engine = engine;
-  engine.on('block', function(block) {
+  engine.on('latest', function(block) {
     self.currentBlock = block;
   });
 };

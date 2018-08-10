@@ -44,7 +44,6 @@ test('binary search irc_estimateGas implementation', function(t) {
         }
         engine.addProvider(vmSubprovider)
         engine.addProvider(new TestBlockProvider());
-        engine.start()
         engine.sendAsync(createPayload({
           method: 'irc_estimateGas',
           params: [{}, 'latest'],

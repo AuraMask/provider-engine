@@ -1,23 +1,31 @@
-const Ircjs = require('ircjs');
-const ProviderEngine = require('./index.js');
-const ZeroClientProvider = require('./zero.js');
+const Webu = require('webu');
+const BasicProvider = require('ethjs-provider-http');
+const ProviderEngine = require('./index');
+const createPayload = require('./util/create-payload.js');
 
-// create engine
-const providerEngine = ZeroClientProvider({
-  // supports http and websockets
-  // but defaults to infura's mainnet rest api
-  // rpcUrl: 'https://mainnet.infura.io',
-  // rpcUrl: 'http://localhost:8545',
-  // rpcUrl: 'wss://mainnet.infura.io/ws',
-  // rpcUrl: 'ws://localhost:8545/ws',
+var engine = new ProviderEngine({
+  blockTrackerProvider: new BasicProvider('http://localhost:8545'),
 });
 
-// use the provider to instantiate Ircjs, Webu, etc
-const irc = new Ircjs(providerEngine);
+engine.start();
 
 // log new blocks
-providerEngine.on('block', function(block) {
-  const blockNumber = Number.parseInt(block.number.toString('hex'), 16);
-  const blockHash = `0x${block.hash.toString('hex')}`;
-  console.log(`block: #${blockNumber} ${blockHash}`);
+engine.on('latest', function(block) {
+  console.log('===============================');
+  console.log(`LATEST BLOCK: #${Number(block)}`);
+  console.log('===============================');
+  engine.stop();
 });
+
+// network connectivity error
+engine.on('error', function(err) {
+  // report connectivity errors
+  console.error(err.stack);
+});
+
+// engine.sendAsync(createPayload({
+//   method: 'irc_getBlock',
+//   params: ['block'],
+// }), (err, resp) => {
+//   console.log(resp);
+// });

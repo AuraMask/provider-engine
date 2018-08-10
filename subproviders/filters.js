@@ -34,7 +34,7 @@ function FilterSubprovider(opts) {
   // we dont have engine immeditately
   setTimeout(function() {
     // asyncBlockHandlers require locking provider until updates are completed
-    self.engine.on('block', function(block) {
+    self.engine.on('latest', function(block) {
       // pause processing
       self._ready.stop();
       // update filters
@@ -102,9 +102,9 @@ FilterSubprovider.prototype.newBlockFilter = function(cb) {
     });
 
     var newBlockHandler = filter.update.bind(filter);
-    self.engine.on('block', newBlockHandler);
+    self.engine.on('latest', newBlockHandler);
     var destroyHandler = function() {
-      self.engine.removeListener('block', newBlockHandler);
+      self.engine.removeListener('latest', newBlockHandler);
     };
 
     self.filterIndex++;
@@ -260,7 +260,7 @@ FilterSubprovider.prototype.onNewPendingBlock = function(block, cb) {
 
 FilterSubprovider.prototype._getBlockNumber = function(cb) {
   const self = this;
-  var blockNumber = bufferToNumberHex(self.engine.currentBlock.number);
+  var blockNumber = bufferToNumberHex(self.engine.currentBlock);
   cb(null, blockNumber);
 };
 

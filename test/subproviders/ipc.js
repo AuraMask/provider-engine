@@ -10,7 +10,6 @@ test('ipc personal_listAccounts', function(t) {
   var engine = new ProviderEngine();
   var ipc = new IpcSubprovider({ipcPath: socketPath});
   engine.addProvider(ipc);
-  engine.start();
   engine.sendAsync(createPayload({
     method: 'personal_listAccounts',
     params: [],
@@ -27,7 +26,6 @@ test('ipc personal_newAccount', function(t) {
   var engine = new ProviderEngine();
   var ipc = new IpcSubprovider({ipcPath: socketPath});
   engine.addProvider(ipc);
-  engine.start();
   engine.sendAsync(createPayload({
     method: 'personal_newAccount',
     params: ['test'],
