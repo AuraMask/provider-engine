@@ -103,9 +103,7 @@ FilterSubprovider.prototype.newBlockFilter = function(cb) {
 
     var newBlockHandler = filter.update.bind(filter);
     self.engine.on('latest', newBlockHandler);
-    var destroyHandler = function() {
-      self.engine.removeListener('latest', newBlockHandler);
-    };
+    var destroyHandler = () => self.engine.removeListener('latest', newBlockHandler);
 
     self.filterIndex++;
     self.filters[self.filterIndex] = filter;
@@ -260,7 +258,7 @@ FilterSubprovider.prototype.onNewPendingBlock = function(block, cb) {
 
 FilterSubprovider.prototype._getBlockNumber = function(cb) {
   const self = this;
-  var blockNumber = bufferToNumberHex(self.engine.currentBlock);
+  var blockNumber = bufferToNumberHex(self.engine.currentBlock.number);
   cb(null, blockNumber);
 };
 

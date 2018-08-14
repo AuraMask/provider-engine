@@ -51,6 +51,7 @@ test('tx sig', function(t) {
   engine.addProvider(providerB);
   engine.addProvider(providerC);
   engine.addProvider(providerD);
+  engine.start();
 
   var txPayload = {
     method: 'irc_sendTransaction',
@@ -125,6 +126,7 @@ test('no such account', function(t) {
   engine.addProvider(providerB);
   engine.addProvider(providerC);
   engine.addProvider(providerD);
+  engine.start();
 
   var txPayload = {
     method: 'irc_sendTransaction',
@@ -153,7 +155,7 @@ test('sign message', function(t) {
   var addressHex = '0x1234362ef32bcd26d3dd18ca749378213625ba0b';
 
   var message = 'haay wuurl';
-  var signature = '0x68dc980608bceb5f99f691e62c32caccaee05317309015e9454eba1a14c3cd4505d1dd098b8339801239c9bcaac3c4df95569dcf307108b92f68711379be14d81c';
+  var signature = '0xadb0f050beabd6fd6b9e5f902e03108de25682932afdfc6009f4c1ea9fe6e71815aff418de1a2ce1703cc51c4d7d4bb29ee32090d40cf5f3ebda051e9233f11e1b';
 
   // sign all messages
   var providerA = injectMetrics(new HookedWalletTxProvider({
@@ -171,6 +173,7 @@ test('sign message', function(t) {
   var engine = new ProviderEngine();
   engine.addProvider(providerA);
   engine.addProvider(providerB);
+  engine.start();
 
   var payload = {
     method: 'irc_sign',
@@ -191,7 +194,7 @@ test('sign message', function(t) {
   });
 
 });
-
+//
 // personal_sign was declared without an explicit set of test data
 // so I made a script out of geth's internals to create this test data
 // https://gist.github.com/kumavis/461d2c0e9a04ea0818e423bb77e3d260
@@ -201,7 +204,7 @@ signatureTest({
   method: 'personal_sign',
   // "hello world"
   message: '0x68656c6c6f20776f726c64',
-  signature: '0xce909e8ea6851bc36c007a0072d0524b07a3ff8d4e623aca4c71ca8e57250c4d0a3fc38fa8fbaaa81ead4b9f6bd03356b6f8bf18bccad167d78891636e1d69561b',
+  signature: '0xf32832a84f9c60c2b20ecd0650f3fdb6fab3447ffc8a53c4234b58b90e82a24b1dfe2931f4b18b58aac1b21e69e19a1e35a510f37ac23c5c4dddac38805113e01c',
   addressHex: '0xbe93f9bacbcffc8ee6663f2647917ed7a20a57bb',
   privateKey: new Buffer('6969696969696969696969696969696969696969696969696969696969696969', 'hex'),
 });
@@ -211,7 +214,7 @@ signatureTest({
   method: 'personal_sign',
   // some random binary message from parity's test
   message: '0x0cc175b9c0f1b6a831c399e26977266192eb5ffee6ae2fec3ad71c777531578f',
-  signature: '0x9ff8350cc7354b80740a3580d0e0fd4f1f02062040bc06b893d70906f8728bb5163837fd376bf77ce03b55e9bd092b32af60e86abce48f7b8d3539988ee5a9be1c',
+  signature: '0x4bfd8ce65ad740403e745fad70ba978d6ab01d18920ef7794b22321a5b86dcae206af1468fffbb41ea514377d868b9c354c88bcf0c1864ee1ac96713d7d966fb1b',
   addressHex: '0xbe93f9bacbcffc8ee6663f2647917ed7a20a57bb',
   privateKey: new Buffer('6969696969696969696969696969696969696969696969696969696969696969', 'hex'),
 });
@@ -223,7 +226,7 @@ signatureTest({
   // https://github.com/ethcore/parity/blob/5369a129ae276d38f3490abb18c5093b338246e0/rpc/src/v1/tests/mocked/eth.rs#L301-L317
   // note: their signature result is incorrect (last byte moved to front) due to a parity bug
   message: '0x0cc175b9c0f1b6a831c399e26977266192eb5ffee6ae2fec3ad71c777531578f',
-  signature: '0xa2870db1d0c26ef93c7b72d2a0830fa6b841e0593f7186bc6c7cc317af8cf3a42fda03bd589a49949aa05db83300cdb553116274518dbe9d90c65d0213f4af491b',
+  signature: '0x7986678d61b74f7a17e477fe291f6867d2426fc537ac3b74f60dfdc8cbd106006b40342133e56d5f89f27ba5c7dbce980f8e48ab276cffc0d6352a79ff8dbd741c',
   addressHex: '0xe0da1edcea030875cd0f199d96eb70f6ab78faf2',
   privateKey: new Buffer('4545454545454545454545454545454545454545454545454545454545454545', 'hex'),
 });
@@ -233,7 +236,7 @@ recoverTest({
   method: 'personal_ecRecover',
   // "hello world"
   message: '0x68656c6c6f20776f726c64',
-  signature: '0xce909e8ea6851bc36c007a0072d0524b07a3ff8d4e623aca4c71ca8e57250c4d0a3fc38fa8fbaaa81ead4b9f6bd03356b6f8bf18bccad167d78891636e1d69561b',
+  signature: '0xf32832a84f9c60c2b20ecd0650f3fdb6fab3447ffc8a53c4234b58b90e82a24b1dfe2931f4b18b58aac1b21e69e19a1e35a510f37ac23c5c4dddac38805113e01c',
   addressHex: '0xbe93f9bacbcffc8ee6663f2647917ed7a20a57bb',
 });
 
@@ -243,7 +246,7 @@ recoverTest({
   // message from parity's test - note result is different than what they are testing against
   // https://github.com/ethcore/parity/blob/5369a129ae276d38f3490abb18c5093b338246e0/rpc/src/v1/tests/mocked/eth.rs#L301-L317
   message: '0x0cc175b9c0f1b6a831c399e26977266192eb5ffee6ae2fec3ad71c777531578f',
-  signature: '0x9ff8350cc7354b80740a3580d0e0fd4f1f02062040bc06b893d70906f8728bb5163837fd376bf77ce03b55e9bd092b32af60e86abce48f7b8d3539988ee5a9be1c',
+  signature: '0x4bfd8ce65ad740403e745fad70ba978d6ab01d18920ef7794b22321a5b86dcae206af1468fffbb41ea514377d868b9c354c88bcf0c1864ee1ac96713d7d966fb1b',
   addressHex: '0xbe93f9bacbcffc8ee6663f2647917ed7a20a57bb',
 });
 
@@ -334,14 +337,8 @@ function signatureTest({testLabel, method, privateKey, addressHex, message, sign
     expectedResult: signature,
   });
 
-  // Personal sign is supposed to have params
-  // ordered in this direction, not the other.
+  // Personal sign is supposed to have params ordered in this direction, not the other.
   if (payload.method === 'personal_sign') {
-    var payload = {
-      method: method,
-      params: [message, addressHex],
-    };
-
     singleRpcTest({
       testLabel: `sign message ${method} - ${testLabel}`,
       payload,
@@ -388,6 +385,7 @@ function singleRpcTest({testLabel, payload, expectedResult, engine}) {
   test(testLabel, function(t) {
     t.plan(3);
 
+    engine.start();
     engine.sendAsync(createPayload(payload), function(err, response) {
       if (err) {
         console.log('bad payload:', payload);

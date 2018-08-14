@@ -37,24 +37,26 @@ function WebuProviderEngine(opts) {
     pollingInterval: opts.pollingInterval || 4000,
   });
 
-  // self._ready.go();
+  self._ready.go();
 }
 
 // public
 
-WebuProviderEngine.prototype._syncBlock = function() {
+WebuProviderEngine.prototype._setCurrentBlock = function(block) {
   const self = this;
-  self._blockTracker.on('latest', block => {
-    self.currentBlock = block;
-  });
+  self.currentBlock = block;
+  self.emit('latest', block);
 };
 
 WebuProviderEngine.prototype.start = function() {
   const self = this;
   if (!self._blockTracker.isRunning()) {
-    self._blockTracker.on('sync', self.emit.bind(self, 'sync'));
-    self._blockTracker.on('latest', self.emit.bind(self, 'latest'));
     self._ready.go();
+    self._blockTracker.on('sync', self.emit.bind(self, 'sync'));
+    self._blockTracker.on('latest', (jsonBlock) => {
+      const bufferBlock = toBufferBlock(jsonBlock);
+      self._setCurrentBlock(bufferBlock);
+    });
   }
 };
 

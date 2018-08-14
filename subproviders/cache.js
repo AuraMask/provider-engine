@@ -91,7 +91,7 @@ BlockCacheProvider.prototype._handleRequest = function(payload, next, end) {
   if (blockTag === 'earliest') {
     requestedBlockNumber = '0x00';
   } else if (blockTag === 'latest') {
-    requestedBlockNumber = ircUtil.bufferToHex(self.currentBlock);
+    requestedBlockNumber = ircUtil.bufferToHex(self.currentBlock.number);
   } else {
     // We have a hex number
     requestedBlockNumber = blockTag;

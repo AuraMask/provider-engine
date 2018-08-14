@@ -60,7 +60,8 @@ function HookedWalletIrcTxSubprovider(opts) {
   self.signTypedMessage = function(msgParams, cb) {
     opts.getPrivateKey(msgParams.from, function(err, privateKey) {
       if (err) return cb(err);
-      const serialized = sigUtil.signTypedData(privateKey, msgParams);
+      const sign = msgParams.data.types ? sigUtil.signTypedData : sigUtil.signTypedDataLegacy;
+      const serialized = sign.call(sigUtil, privateKey, msgParams);
       cb(null, serialized);
     });
   };

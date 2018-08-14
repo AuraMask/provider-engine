@@ -75,14 +75,11 @@ VmSubprovider.prototype.estimateGas = function(payload, end) {
         var mid = (hi + lo) / 2;
         payload.params[0].gas = mid;
         self.runVm(payload, function(err, results) {
-          gasUsed = err ? self._blockGasLimit : ircUtil.bufferToInt(results.gasUsed);
+          const gasUsed = err ? self._blockGasLimit : ircUtil.bufferToInt(results.gasUsed);
           if (err || gasUsed === 0) {
             lo = mid;
           } else {
             hi = mid;
-            // Perf improvement: stop the binary search when the difference in gas between two iterations
-            // is less then `minDiffBetweenIterations`. Doing this cuts the number of iterations from 23
-            // to 12, with only a ~1000 gas loss in precision.
             if (Math.abs(prevGasLimit - mid) < minDiffBetweenIterations) {
               lo = hi;
             }

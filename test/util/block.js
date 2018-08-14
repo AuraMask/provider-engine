@@ -25,28 +25,28 @@ function TestBlockProvider(methods) {
       setTimeout(() => end(null, result));
     },
     irc_getLogs: function(payload, next, end) {
-      const transactions = self._currentBlock.transactions;
+      const transactions = self.currentBlock.transactions;
       // return result asynchronously
       setTimeout(() => end(null, transactions));
     },
   });
 }
 
-// class _currentBlocks
+// class currentBlocks
 TestBlockProvider.createBlock = createBlock;
 TestBlockProvider.incrementHex = incrementHex;
 
 TestBlockProvider.prototype.getBlockByRef = function(blockRef) {
   const self = this;
   if (blockRef === 'latest') {
-    return self._currentBlock;
+    return self.currentBlock;
   } else {
     // if present, return block at reference
     let block = self._blockChain[blockRef];
     if (block) return block;
     // check if we should create the new block
     const blockNum = Number(blockRef);
-    if (blockNum > Number(self._currentBlock.number)) return;
+    if (blockNum > Number(self.currentBlock.number)) return;
     // create, store, and return the new block
     block = createBlock({number: blockRef});
     self._blockChain[blockRef] = block;
@@ -56,11 +56,14 @@ TestBlockProvider.prototype.getBlockByRef = function(blockRef) {
 
 TestBlockProvider.prototype.nextBlock = function(blockParams) {
   const self = this;
-  const newBlock = createBlock(blockParams, self._currentBlock, self._pendingTxs);
+  // if (self.currentBlock.number == blockParams.number) {
+  //   return self.currentBlock;
+  // }
+  const newBlock = createBlock(blockParams, self.currentBlock, self._pendingTxs);
   self._pendingTxs = [];
-  self._currentBlock = newBlock;
+  self.currentBlock = newBlock;
   self._blockChain[newBlock.number] = newBlock;
-  return self._currentBlock;
+  return self.currentBlock;
 };
 
 TestBlockProvider.prototype.addTx = function(txParams) {

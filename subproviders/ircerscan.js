@@ -1,27 +1,3 @@
-/*
- * Ircerscan.io API connector
- * @author github.com/axic
- *
- * The ircerscan.io API supports:
- *
- * 1) Natively via proxy methods
- * - irc_blockNumber *
- * - irc_getBlockByNumber *
- * - irc_getBlockTransactionCountByNumber
- * - getTransactionByHash
- * - getTransactionByBlockNumberAndIndex
- * - irc_getTransactionCount *
- * - irc_sendRawTransaction *
- * - irc_call *
- * - irc_getTransactionReceipt *
- * - irc_getCode *
- * - irc_getStorageAt *
- *
- * 2) Via non-native methods
- * - irc_getBalance
- * - irc_listTransactions (non-standard)
- */
-
 const xhr = process.browser ? require('xhr') : require('request');
 const inherits = require('util').inherits;
 const Subprovider = require('./subprovider.js');
@@ -32,8 +8,8 @@ inherits(IrcerscanProvider, Subprovider);
 
 function IrcerscanProvider(opts) {
   opts = opts || {};
-  this.network = opts.network || 'api';
-  this.proto = (opts.https || false) ? 'https' : 'http';
+  this.network = opts.network || 'scan';
+  this.proto = opts.https ? 'https' : 'http';
   this.requests = [];
   this.times = isNaN(opts.times) ? 4 : opts.times;
   this.interval = isNaN(opts.interval) ? 1000 : opts.interval;
@@ -196,8 +172,8 @@ function toQueryString(params) {
 }
 
 function ircerscanXHR(useGetMethod, proto, network, module, action, params, end) {
-  var uri = proto + '://' + network + '.ircerscan.io/api?' + toQueryString({module: module, action: action}) + '&' + toQueryString(params);
-
+  var uri = proto + '://' + network + '.ircerscan.io/api/' + toQueryString({module: module, action: action}) + '&' + toQueryString(params);
+  console.log(uri);
   xhr({
     uri: uri,
     method: useGetMethod ? 'GET' : 'POST',

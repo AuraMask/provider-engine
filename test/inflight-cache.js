@@ -12,19 +12,19 @@ inflightTest('getBalance for latest', {
   params: ['0xabcd', 'latest'],
 }, true);
 
-// inflightTest('getBlock for latest', {
-//   method: 'irc_getBlockByNumber',
-//   params: ['latest', false],
-// }, true);
-//
-// inflightTest('getBlock for latest then 0', [
-//   {
-//     method: 'irc_getBlockByNumber',
-//     params: ['latest', false],
-//   }, {
-//     method: 'irc_getBlockByNumber',
-//     params: ['0x0', false],
-//   }], false);
+inflightTest('getBlock for latest', {
+  method: 'irc_getBlockByNumber',
+  params: ['latest', false],
+}, true);
+
+inflightTest('getBlock for latest then 0', [
+  {
+    method: 'irc_getBlockByNumber',
+    params: ['latest', false],
+  }, {
+    method: 'irc_getBlockByNumber',
+    params: ['0x0', false],
+  }], false);
 
 function inflightTest(label, payloads, shouldHitCacheOnSecondRequest) {
   if (!Array.isArray(payloads)) {
@@ -49,9 +49,8 @@ function inflightTest(label, payloads, shouldHitCacheOnSecondRequest) {
     engine.addProvider(blockProvider);
 
     // run polling until first block
+    engine.start();
     engine.once('latest', () => {
-      // stop polling
-      engine.stop();
       // clear subprovider metrics
       cacheProvider.clearMetrics();
       dataProvider.clearMetrics();
@@ -62,57 +61,38 @@ function inflightTest(label, payloads, shouldHitCacheOnSecondRequest) {
       const handlingProvider = isBlockTest ? blockProvider : dataProvider;
 
       // begin cache test
-      cacheCheck(t, engine, cacheProvider, handlingProvider, payloads, function(err, response) {
-        t.end();
-      });
+      cacheCheck(t, engine, cacheProvider, handlingProvider, payloads);
     });
 
-    function cacheCheck(t, engine, cacheProvider, handlingProvider, payloads, cb) {
+    function cacheCheck(t, engine, cacheProvider, handlingProvider, payloads) {
       var method = payloads[0].method;
-      requestSimultaneous(payloads, noop, noop, function(err, responses) {
+      requestSimultaneous(payloads, function(err, responses) {
         // first request
         t.ifError(err, 'did not error');
         t.ok(responses && responses.filter(Boolean).length, 'has responses');
 
         if (shouldHitCacheOnSecondRequest) {
-
           t.equal(cacheProvider.getWitnessed(method).length, 2, 'cacheProvider did see "' + method + '"');
           t.equal(cacheProvider.getHandled(method).length, 1, 'cacheProvider did NOT handle "' + method + '"');
-
           t.equal(handlingProvider.getWitnessed(method).length, 1, 'handlingProvider did see "' + method + '"');
           t.equal(handlingProvider.getHandled(method).length, 1, 'handlingProvider did handle "' + method + '"');
-
         } else {
-
           t.equal(cacheProvider.getWitnessed(method).length, 2, 'cacheProvider did see "' + method + '"');
           t.equal(cacheProvider.getHandled(method).length, 0, 'cacheProvider did NOT handle "' + method + '"');
-
           t.equal(handlingProvider.getWitnessed(method).length, 2, 'handlingProvider did see "' + method + '"');
           t.equal(handlingProvider.getHandled(method).length, 2, 'handlingProvider did handle "' + method + '"');
-
         }
-
+        engine.stop();
+        t.end();
       });
     }
 
-    function requestSimultaneous(payloads, afterFirst, afterSecond, cb) {
+    function requestSimultaneous(payloads, test) {
       asyncParallel([
-        (cb) => {
-          engine.sendAsync(createPayload(payloads[0]), (err, result) => {
-            afterFirst(err, result);
-            cb(err, result);
-          });
-        },
-        (cb) => {
-          engine.sendAsync(createPayload(payloads[1]), (err, result) => {
-            afterSecond(err, result);
-            cb(err, result);
-          });
-        },
-      ], cb);
+        cb => engine.sendAsync(createPayload(payloads[0]), cb),
+        cb => engine.sendAsync(createPayload(payloads[1]), cb),
+      ], test);
     }
   });
 
 }
-
-function noop() {}

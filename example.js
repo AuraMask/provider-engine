@@ -12,10 +12,11 @@ engine.start();
 // log new blocks
 engine.on('latest', function(block) {
   console.log('===============================');
-  console.log(`LATEST BLOCK: #${Number(block)}`);
+  console.log(`LATEST BLOCK: #${block}`);
   console.log('===============================');
   engine.stop();
 });
+
 
 // network connectivity error
 engine.on('error', function(err) {

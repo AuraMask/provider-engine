@@ -1,5 +1,4 @@
 const test = require('tape');
-const BasicProvider = require('ethjs-provider-http');
 const ProviderEngine = require('../index.js');
 const FixtureProvider = require('../subproviders/fixture.js');
 const CacheProvider = require('../subproviders/cache.js');
@@ -217,7 +216,7 @@ function cacheTest(label, payloads, shouldHitCacheOnSecondRequest) {
     // handle dummy block
     var blockProvider = injectMetrics(new TestBlockProvider());
 
-    var engine = new ProviderEngine({blockTrackerProvider: new BasicProvider('http://localhost:8545')});
+    var engine = new ProviderEngine();
     engine.addProvider(cacheProvider);
     engine.addProvider(dataProvider);
     engine.addProvider(blockProvider);
