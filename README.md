@@ -1,6 +1,4 @@
-# Webu ProviderEngine
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/AuraMask/provider-engine.svg)](https://greenkeeper.io/)
+# Webu ProviderEngine [![CircleCI](https://circleci.com/gh/AuraMask/provider-engine.svg?style=svg)](https://circleci.com/gh/AuraMask/provider-engine)
 
 Webu ProviderEngine is a tool for composing your own [webu providers](https://github.com/irchain/wiki/wiki/JavaScript-API#webu).
 

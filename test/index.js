@@ -7,6 +7,7 @@ require('./subscriptions');
 require('./wallet');
 require('./subproviders/sanitizer');
 require('./subproviders/vm');
-require('./subproviders/ipc');
-// require('./subproviders/ircerscan');
+if (process.argv[2]){
+  require('./subproviders/ipc');
+}
 
