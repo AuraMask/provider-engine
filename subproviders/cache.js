@@ -253,8 +253,7 @@ BlockCacheStrategy.prototype.canCache = function(payload) {
 // naively removes older block caches
 BlockCacheStrategy.prototype.cacheRollOff = function(previousBlock) {
   const self = this;
-  const previousHex = ircUtil.bufferToHex(previousBlock);
-  const oldBlockNumber = Number.parseInt(previousHex, 16);
+  const oldBlockNumber = ircUtil.bufferToInt(previousBlock.number);
   // clear old caches
   Object.keys(self.cache)
         .map(Number)
